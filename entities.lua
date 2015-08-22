@@ -52,7 +52,9 @@ end
 --Call draw on every entity
 function entities.draw()
   for k,v in pairs(entities._entlist) do
-    v:draw()
+    if not v.__mdraw then
+      v:draw()
+    end
   end
 end
 
