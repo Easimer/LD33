@@ -3,7 +3,7 @@ entities = {}
 entities._entlist = {}
 entities._lastid = 0
 
---Create new entry in entities and return the ID
+--Create new entry in entities and return the new entity
 function entities.create_entity()
   entities._lastid = entities._lastid + 1
   newent = {}
@@ -18,6 +18,23 @@ function entities.create_entity()
   --table.insert(entities._entlist, entities._lastid, newent)
   print("New entitity " .. tostring(newent) .. " created with ID " .. newent.id)
   return newent
+end
+
+--Add entity to the system
+--Missing members like update, id, draw, etc., will be declared.
+function entities.add_entity(ent)
+  ent = ent
+  entities._lastid = entities._lastid + 1
+  ent.id = entities._lastid
+  ent.update = ent.update or function(dt) end
+  ent.draw = ent.draw or function() end
+  ent.mousepressed = ent.mousepressed or function(x,y,b) end
+  ent.mousereleased = ent.mousereleased or function(x,y,b) end
+  ent.keypressed = ent.keypressed or function(k) end
+  ent.keyreleased = ent.keyreleased or function(k) end
+  entities._entlist[entities._lastid] = ent
+  print("Entity " .. tostring(ent) .. " added with ID " .. ent.id)
+  return ent
 end
 
 --Call update on every entity
