@@ -2,15 +2,14 @@ require "assets"
 
 player = {}
 
-player._sprites = {}
-player._keystate = {}
-player.pos = {x = 100, y = 100}
-player.state = "idle"
-player.vel = {x = 0, y = 0}
-player.rot = 0
-player._controlled = true
-
 function player.load(self)
+  self._sprites = {}
+  self._keystate = {}
+  self.pos = {x = 100, y = 100}
+  self.state = "idle"
+  self.vel = {x = 0, y = 0}
+  self.rot = 0
+  self._controlled = true
   self._sprites["idle"] = {
     frame = 1,
     maxframes = 2,
@@ -49,6 +48,8 @@ function player.update(self, dt)
   end
   --physics stuff
   if self._controlled then
+    game.camera.x = self.pos.x - love.window.getWidth() / 2
+    game.camera.y = self.pos.y - love.window.getHeight() / 2
     if self._keystate["w"] or self._keystate["up"] then
       --a padló koszos, a fal színes
       self.vel.x = self.vel.x + 100 * math.cos(self.rot) * dt
@@ -70,23 +71,30 @@ function player.update(self, dt)
     if self._keystate["d"] or self._keystate["right"] then
       self.rot = self.rot + (5 * dt)
     end
+    --add velocity to position
+    self.pos.x = self.pos.x + self.vel.x * 10 * dt
+    self.pos.y = self.pos.y + self.vel.y * 10 * dt
+    --slow down
+    self.vel.x = self.vel.x - self.vel.x / 2 * dt
+    self.vel.y = self.vel.y - self.vel.y / 2 * dt
   end
-  --add velocity to position
-  self.pos.x = self.pos.x + self.vel.x * 10 * dt
-  self.pos.y = self.pos.y + self.vel.y * 10 * dt
-  --slow down
-  self.vel.x = self.vel.x - self.vel.x / 2 * dt
-  self.vel.y = self.vel.y - self.vel.y / 2 * dt
 end
 
 function player.draw(self)
-  love.graphics.print("Player state: " .. self.state)
-  love.graphics.print("Player speed: " .. tostring(math.floor(math.sqrt(math.pow(self.vel.x, 2) + math.pow(self.vel.x, 2)))), 0, 24)
+  if self._controlled then
+    love.graphics.print("PlayerR X:" .. math.floor(self.pos.x) .. " Y:" .. math.floor(self.pos.y), 0, 24)
+    love.graphics.print("Camera X:" .. math.floor(game.camera.x) .. " Y:" .. math.floor(game.camera.y), 0, 48)
+    love.graphics.print("Player state: " .. self.state)
+    love.graphics.print("PlayerR X:" .. math.floor(self.pos.x) .. " Y:" .. math.floor(self.pos.y) .. " VelX:" .. math.floor(self.vel.x) .. " VelY:" .. math.floor(self.vel.y), 0, 74)
+  else
+    love.graphics.print("Player" .. self.id .. " X:" .. math.floor(self.pos.x) .. " Y:" .. math.floor(self.pos.y) .. " VelX:" .. math.floor(self.vel.x) .. " VelY:" .. math.floor(self.vel.y), 0, 98)
+  end
   if not self._sprites[self.state] then
     return
   end
+  local drawx, drawy
   love.graphics.draw(self._sprites[self.state].frames[self._sprites[self.state].frame],
-    self.pos.x, self.pos.y, self.rot + (math.pi / 2), 2, 2,
+    self.pos.x - game.camera.x, self.pos.y - game.camera.y, self.rot + (math.pi / 2), 2, 2,
     assets.get_current_frame(self._sprites[self.state]):getWidth() / 2,
     assets.get_current_frame(self._sprites[self.state]):getHeight() / 2)
 end
