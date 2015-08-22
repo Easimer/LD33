@@ -8,6 +8,7 @@ player.pos = {x = 100, y = 100}
 player.state = "idle"
 player.vel = {x = 0, y = 0}
 player.rot = 0
+player._controlled = true
 
 function player.load(self)
   self._sprites["idle"] = {
@@ -47,26 +48,28 @@ function player.update(self, dt)
     self._sprites[self.state].__ftime = 0
   end
   --physics stuff
-  if self._keystate["w"] or self._keystate["up"] then
-    --a padló koszos, a fal színes
-    self.vel.x = self.vel.x + 100 * math.cos(self.rot) * dt
-    if self.vel.x > 30 then
-      self.vel.x = 30
+  if self._controlled then
+    if self._keystate["w"] or self._keystate["up"] then
+      --a padló koszos, a fal színes
+      self.vel.x = self.vel.x + 100 * math.cos(self.rot) * dt
+      if self.vel.x > 30 then
+        self.vel.x = 30
+      end
+      self.vel.y = self.vel.y + 100 * math.sin(self.rot) * dt
+      if self.vel.y > 30 then
+        self.vel.y = 30
+      end
     end
-    self.vel.y = self.vel.y + 100 * math.sin(self.rot) * dt
-    if self.vel.y > 30 then
-      self.vel.y = 30
+    if self._keystate["a"] or self._keystate["left"] then
+      self.rot = self.rot - (5 * dt)
     end
-  end
-  if self._keystate["a"] or self._keystate["left"] then
-    self.rot = self.rot - (5 * dt)
-  end
-  if self._keystate["s"] or self._keystate["down"] then
-    self.vel.x = self.vel.x - self.vel.x / 2 * dt
-    self.vel.y = self.vel.y - self.vel.y / 2 * dt
-  end
-  if self._keystate["d"] or self._keystate["right"] then
-    self.rot = self.rot + (5 * dt)
+    if self._keystate["s"] or self._keystate["down"] then
+      self.vel.x = self.vel.x - self.vel.x / 2 * dt
+      self.vel.y = self.vel.y - self.vel.y / 2 * dt
+    end
+    if self._keystate["d"] or self._keystate["right"] then
+      self.rot = self.rot + (5 * dt)
+    end
   end
   --add velocity to position
   self.pos.x = self.pos.x + self.vel.x * 10 * dt
@@ -78,7 +81,7 @@ end
 
 function player.draw(self)
   love.graphics.print("Player state: " .. self.state)
-  love.graphics.print("Player speed: " .. tostring(math.sqrt(math.pow(self.vel.x, 2) + math.pow(self.vel.x, 2))) .. " px/s", 0, 24)
+  love.graphics.print("Player speed: " .. tostring(math.floor(math.sqrt(math.pow(self.vel.x, 2) + math.pow(self.vel.x, 2)))), 0, 24)
   if not self._sprites[self.state] then
     return
   end
