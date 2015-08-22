@@ -15,6 +15,7 @@ function entities.create_entity()
   newent.mousereleased = function(x,y,b) end
   newent.keypressed = function(k) end
   newent.keyreleased = function(k) end
+  newent.tick = function() end
   entities._entlist[entities._lastid] = newent
   --table.insert(entities._entlist, entities._lastid, newent)
   print("New entitity " .. tostring(newent) .. " created with ID " .. newent.id)
@@ -34,6 +35,7 @@ function entities.add_entity(ent)
   ent.mousereleased = ent.mousereleased or function(x,y,b) end
   ent.keypressed = ent.keypressed or function(k) end
   ent.keyreleased = ent.keyreleased or function(k) end
+  ent.tick = ent.tick or function() end
   entities._entlist[entities._lastid] = ent
   print("Entity " .. tostring(ent) .. " added with ID " .. ent.id)
   ent:load()
@@ -93,5 +95,11 @@ end
 function entities.keyreleased(key)
   for k,v in pairs(entities._entlist) do
     v:keyreleased(key)
+  end
+end
+
+function entities.tick()
+  for k,v in pairs(entities._entlist) do
+    v:tick()
   end
 end
