@@ -14,7 +14,8 @@ function entities.create_entity()
   newent.mousereleased = function(x,y,b) end
   newent.keypressed = function(k) end
   newent.keyreleased = function(k) end
-  table.insert(entities._entlist, entities._lastid, newent)
+  entities._entlist[entities._lastid] = newent
+  --table.insert(entities._entlist, entities._lastid, newent)
   print("New entitity " .. tostring(newent) .. " created with ID " .. newent.id)
   return newent.id, newent
 end
@@ -41,8 +42,10 @@ function entities.get_entity(id)
   return entities._entlist[id]
 end
 
-entities.destroy_entity = function(id)
-  entities._entlist.remove()
+function entities.destroy_entity(id)
+  if not entities._entlist[id] == nil then
+    entities._entlist[id] = nil
+  end
 end
 
 --Call mousepressed on every entity
