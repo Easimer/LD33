@@ -4,6 +4,7 @@ background = {}
 background._image = nil
 background.offset = {x = 0, y = 0}
 background.__mdraw = true --manual draw
+background._nophysics = true --no collision
 
 function background.load(self)
   self._image = assets.load_image("data/background.png")
@@ -14,5 +15,5 @@ function background.draw(self)
 end
 
 function background.update(self, dt)
-  
+
 end

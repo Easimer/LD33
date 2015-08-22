@@ -33,3 +33,23 @@ end
 function cell:draw()
   love.graphics.draw(self._sprites[self.state].frames[1], self.pos.x - game.camera.x, self.pos.y - game.camera.y, self.rot, 1, 1, self._sprites[self.state].frames[1]:getWidth() / 2, self._sprites[self.state].frames[1]:getHeight() / 2)
 end
+
+function cell:getX()
+  return self.pos.x
+end
+
+function cell:getY()
+  return self.pos.y
+end
+
+function cell:getW()
+  return assets.get_current_frame(self._sprites[self.state]):getWidth()
+end
+
+function cell:getH()
+  return assets.get_current_frame(self._sprites[self.state]):getHeight()
+end
+
+function cell:collision(other)
+  print("Collision with " .. other.id)
+end

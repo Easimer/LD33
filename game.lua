@@ -28,6 +28,7 @@ end
 
 function game.update(dt)
   entities.update(dt)
+  game.ticktime = game.ticktime + dt
   if game.ticktime >= 0.05 then
     entities.tick()
     game.ticktime = 0

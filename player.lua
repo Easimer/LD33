@@ -112,3 +112,23 @@ function player.keyreleased(self, key)
     self.state = "idle"
   end
 end
+
+function player.getX(self)
+  return self.pos.x
+end
+
+function player.getY(self)
+  return self.pos.y
+end
+
+function player.getW(self)
+  return assets.get_current_frame(self._sprites[self.state]):getWidth()
+end
+
+function player.getH(self)
+  return assets.get_current_frame(self._sprites[self.state]):getHeight()
+end
+
+function player.collision(self, other)
+  print("Collision with " .. other.id)
+end
