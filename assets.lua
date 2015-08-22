@@ -39,3 +39,7 @@ end
 function assets.unload(name)
   assets._assets[name] = nil
 end
+
+function assets.get_current_frame(animation)
+  return animation.frames[animation.frame];
+end
