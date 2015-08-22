@@ -17,7 +17,7 @@ function entities.create_entity()
   entities._entlist[entities._lastid] = newent
   --table.insert(entities._entlist, entities._lastid, newent)
   print("New entitity " .. tostring(newent) .. " created with ID " .. newent.id)
-  return newent.id, newent
+  return newent
 end
 
 --Call update on every entity
