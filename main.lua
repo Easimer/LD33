@@ -3,11 +3,14 @@ require "entities"
 require "player"
 
 game = {
-  ticktime = 0
+  ticktime = 0,
+  player = nil
 }
 
 function love.load()
-  entities.add_entity(player)
+  love.window.setTitle("Vector Decay") --working title
+  love.window.setMode(1024, 768)
+  game.player = entities.add_entity(player)
 end
 
 function love.update(dt)
@@ -19,6 +22,7 @@ function love.update(dt)
 end
 
 function love.draw()
+  love.graphics.draw(assets.load_image("data/background.png"))
   entities.draw()
 end
 
