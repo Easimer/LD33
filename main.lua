@@ -1,8 +1,12 @@
+require "entities"
+
 function love.load()
- print("Hello Löve!")
+ print("Calling create_entity")
+ entities.create_entity()
+ print("DONE")
 end
 
-function love.update()
+function love.update(dt)
 
 end
 
