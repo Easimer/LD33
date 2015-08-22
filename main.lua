@@ -1,3 +1,4 @@
+require "assets"
 require "entities"
 
 function love.load()
