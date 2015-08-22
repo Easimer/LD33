@@ -1,7 +1,9 @@
+require "class"
 require "assets"
 require "entities"
 require "player"
 require "background"
+require "cell"
 
 game = {
   ticktime = 0,
@@ -16,8 +18,12 @@ game = {
 function game.load()
   love.window.setTitle("Vector Decay") --working title
   love.window.setMode(1024, 768)
-  game.player = entities.add_entity(player)
+  game.player = entities.add_entity(class(player))
+  p2 = entities.add_entity(class(player))
+  p2._controlled = false
+  p2.pos = {x = 0, y = 0}
   game.background = entities.add_entity(background)
+  entities.add_entity(class(cell)).pos = {x = 25, y = 300}
 end
 
 function game.update(dt)
