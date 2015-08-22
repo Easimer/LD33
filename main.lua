@@ -1,11 +1,21 @@
 require "assets"
 require "entities"
+require "player"
+
+game = {
+  ticktime = 0
+}
 
 function love.load()
+  entities.add_entity(player)
 end
 
 function love.update(dt)
   entities.update(dt)
+  if game.ticktime > 0.05 then
+    entities.tick()
+    game.ticktime = 0
+  end
 end
 
 function love.draw()
