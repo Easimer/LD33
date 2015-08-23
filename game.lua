@@ -4,6 +4,7 @@ require "entities"
 require "player"
 require "background"
 require "cell"
+require "sound"
 
 game = {
   ticktime = 0,
