@@ -132,7 +132,7 @@ function entities.collision()
             if collision.rect2(v:getX(), v:getY(), v:getW(), v:getH(), v2:getX(), v2:getY(), v2:getW(), v2:getH()) then
               v:collision(v2)
               v2:collision(v)
-              print("CollCheck(" .. k .. "," .. k2 .. "): COLLISION!!!!!")
+              --print("CollCheck(" .. k .. "," .. k2 .. "): COLLISION!!!!!")
             else
               --print("CollCheck(" .. k .. "," .. k2 .. "): check ok, no collision")
             end
