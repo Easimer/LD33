@@ -130,5 +130,5 @@ function player.getH(self)
 end
 
 function player.collision(self, other)
-  print("Collision with " .. other.id)
+  
 end

@@ -51,5 +51,5 @@ function cell:getH()
 end
 
 function cell:collision(other)
-  print("Collision with " .. other.id)
+  
 end
