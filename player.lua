@@ -50,7 +50,7 @@ function player.update(self, dt)
   if self._controlled then
     game.camera.x = self.pos.x - love.window.getWidth() / 2
     game.camera.y = self.pos.y - love.window.getHeight() / 2
-    if self._keystate["w"] or self._keystate["up"] then
+    if self._keystate["w"] then
       --a padló koszos, a fal színes
       self.vel.x = self.vel.x + 100 * math.cos(self.rot) * dt
       if self.vel.x > 30 then
@@ -61,14 +61,14 @@ function player.update(self, dt)
         self.vel.y = 30
       end
     end
-    if self._keystate["a"] or self._keystate["left"] then
+    if self._keystate["a"] then
       self.rot = self.rot - (5 * dt)
     end
-    if self._keystate["s"] or self._keystate["down"] then
+    if self._keystate["s"] then
       self.vel.x = self.vel.x - self.vel.x / 2 * dt
       self.vel.y = self.vel.y - self.vel.y / 2 * dt
     end
-    if self._keystate["d"] or self._keystate["right"] then
+    if self._keystate["d"] then
       self.rot = self.rot + (5 * dt)
     end
     --add velocity to position
