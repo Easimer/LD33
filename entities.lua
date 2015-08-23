@@ -122,7 +122,7 @@ end
 
 --Collision check
 function entities.collision()
-  start = os.clock()
+  --start = os.clock()
   already = {}
   for k,v in pairs(entities._entlist) do
     for k2,v2 in pairs(entities._entlist) do
@@ -147,4 +147,22 @@ function entities.collision()
     end
   end
   --print("CollCheck: finished under " .. tostring(os.clock() - start) .. " seconds!")
+end
+
+function entities.get_nearest(id)
+  local nearest = 0
+  local nearest_dist = 5.6e300
+  local center = entities.get_entity(id)
+  if not center then return nil end
+  if (not center.getX) or (not center.getY) then return nil end
+  for k,v in pairs(entities._entlist) do
+    if v.getX and v.getY then
+      local distance = math.sqrt(math.pow(center:getX() + v:getX(), 2) + math.pow(center:getY() + v:getY(), 2))
+      if distance <= nearest_dist then
+        nearest_dist = distance
+        nearest = v.id
+      end
+    end
+  end
+  return nearest
 end
