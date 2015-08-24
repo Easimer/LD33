@@ -49,7 +49,16 @@ end
 --Call update on every entity
 function entities.update(dt)
   for k,v in pairs(entities._entlist) do
-    v:update(dt)
+    if v._dead then
+      if game.player then
+        if game.player.id == v.id then
+          game.player = nil
+        end
+      end
+      entities._entlist[k] = nil
+    else
+      v:update(dt)
+    end
   end
 end
 
@@ -165,4 +174,15 @@ function entities.get_nearest(id)
     end
   end
   return nearest
+end
+
+function entities.get_first_player()
+  print("get first player")
+  for k,v in pairs(entities._entlist) do
+    print("GFP: " .. k)
+    if v._player then
+      print("found new player at " .. tostring(v))
+      return v
+    end
+  end
 end

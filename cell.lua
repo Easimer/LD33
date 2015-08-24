@@ -1,4 +1,5 @@
 require "assets"
+require "player"
 
 cell = {}
 
@@ -8,6 +9,8 @@ function cell:load()
   self.state = "idle"
   self.vel = {x = 0, y = 0}
   self.rot = 0
+  self.infectable = true
+  self.ticks = 0
   self._sprites["idle"] = {
     frame = 1,
     maxframes = 1,
@@ -51,5 +54,22 @@ function cell:getH()
 end
 
 function cell:collision(other)
-  
+
+end
+
+--spawn virions if infected
+function cell:tick()
+  self.ticks = self.ticks + 1
+  if self.state == "infected" and self.ticks >= 20 then
+    self.ticks = 0
+    local nvirion = entities.add_entity(class(player))
+    nvirion._controlled = false
+    local selfx = self.pos.x
+    local selfy = self.pos.y
+    npos = {x = selfx, y = selfy}
+    setmetatable(nvirion.pos, getmetatable(npos))
+    nvirion.vel = {x = math.random(-20, 20), y = math.random(-20, 20)}
+    --setmetatable(npos, getmetatable(self.pos))
+    print("X:" .. npos.x .. "Y:" .. npos.y)
+  end
 end

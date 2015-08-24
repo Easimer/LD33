@@ -7,6 +7,7 @@ require "cell"
 require "sound"
 
 game = {
+  version = "0,0,0,7.2,1,0,0.3,0,0,0#2",
   ticktime = 0,
   player = nil,
   camera = {
@@ -33,6 +34,14 @@ function game.update(dt)
   if game.ticktime >= 0.05 then
     entities.tick()
     game.ticktime = 0
+  end
+  if not game.player then
+    local newp = entities.get_first_player()
+    game.player = newp
+    print(newp)
+    if game.player then
+      game.player._controlled = true
+    end
   end
 end
 
@@ -63,7 +72,6 @@ end
 
 function game.errhand(msg)
 	msg = tostring(msg)
-  print("FATAL ERROR")
 	error_printer(msg, 2)
 
 	if not love.window or not love.graphics or not love.event then
@@ -107,7 +115,27 @@ function game.errhand(msg)
 			table.insert(err, l)
 		end
 	end
-  table.insert(err, "\n\nSend report to: easimer@gmail.com")
+  table.insert(err, "\n--System:--\n")
+  table.insert(err, "Lua version: " .. _VERSION)
+  verM, verm, rev, code = love.getVersion()
+  table.insert(err, string.format("Löve2D version: %d.%d.%d %s", verM, verm, rev, code))
+  local os = love.system.getOS()
+  table.insert(err, "Operating System: " .. os)
+  if os == "Linux" then
+    local uname = io.popen("uname -a")
+    for line in uname:lines() do
+      table.insert(err, string.format("\t\t%s\n", line))
+    end
+    uname:close()
+  end
+  table.insert(err, "\n\nYou can send this error screen to: easimer@gmail.com\n")
+  local keyb
+  if os == "Windows" then keyb = "Alt-F4 or Ctrl-W"
+  elseif os == "OS X" then keyb = "Cmd+Q or Cmd+W"
+  elseif os == "Linux" then keyb = "Alt-F4, Ctrl-W or another exit key combo"
+  elseif os == "Android" then keyb = "the Home or Back button"
+  else keyb = "exit button." end
+  table.insert(err, "Now, quit and restart the game using " .. keyb)
 	local p = table.concat(err, "\n")
 	p = string.gsub(p, "\t", "")
 	p = string.gsub(p, "%[string \"(.-)\"%]", "%1")
@@ -116,7 +144,7 @@ function game.errhand(msg)
 		local pos = love.window.toPixels(100)
 		love.graphics.clear()
     love.graphics.setFont(logofont)
-    love.graphics.print("Vector Decay", love.window.toPixels(95), love.window.toPixels(38))
+    love.graphics.print("Vector Decay v" .. game.version, love.window.toPixels(95), love.window.toPixels(38))
     love.graphics.setFont(font)
 		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)
 		love.graphics.present()

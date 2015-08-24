@@ -10,6 +10,8 @@ function player.load(self)
   self.vel = {x = 0, y = 0}
   self.rot = 0
   self._controlled = true
+  self.collides = {} --ent:bool
+  self._player = true
   self._sprites["idle"] = {
     frame = 1,
     maxframes = 2,
@@ -71,12 +73,15 @@ function player.update(self, dt)
     if self._keystate["d"] then
       self.rot = self.rot + (5 * dt)
     end
-    --add velocity to position
-    self.pos.x = self.pos.x + self.vel.x * 10 * dt
-    self.pos.y = self.pos.y + self.vel.y * 10 * dt
-    --slow down
-    self.vel.x = self.vel.x - self.vel.x / 2 * dt
-    self.vel.y = self.vel.y - self.vel.y / 2 * dt
+  end
+  --add velocity to position
+  self.pos.x = self.pos.x + self.vel.x * 10 * dt
+  self.pos.y = self.pos.y + self.vel.y * 10 * dt
+  --slow down
+  self.vel.x = self.vel.x - self.vel.x / 2 * dt
+  self.vel.y = self.vel.y - self.vel.y / 2 * dt
+  for k,v in pairs(self.collides) do
+    self.collides[k] = nil
   end
 end
 
@@ -111,6 +116,14 @@ function player.keyreleased(self, key)
   if key == "w" or key == "up" or key == "s" or key == "down" then
     self.state = "idle"
   end
+  if key == "e" then
+    for k,_ in pairs(self.collides) do
+      if k.infectable then
+        k.state = "infected"
+        self._dead = true
+      end
+    end
+  end
 end
 
 function player.getX(self)
@@ -130,5 +143,19 @@ function player.getH(self)
 end
 
 function player.collision(self, other)
+  self.collides[other] = true
+end
+
+dummy_player = {}
+
+function dummy_player:load()
+  self._player = true
+  self._controlled = true
+  self._dummy = true
+  self.pos = {x = 0, y = 0}
+  self.vel = {x = 0, y = 0}
+end
+
+function dummy_player:update(dt)
   
 end
